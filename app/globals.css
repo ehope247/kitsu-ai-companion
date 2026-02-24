@@ -1,0 +1,43 @@
+@import "tailwindcss";
+
+@theme {
+  --color-dark: #030303;
+  --color-dark-card: #0A0A0A;
+  --color-gold: #D4AF37;
+  --color-gold-light: #F9F1D8;
+  --color-gold-dark: #AA8C2C;
+  --color-text-main: #EAEAEA;
+  --color-text-muted: #888888;
+  
+  --font-serif: "Playfair Display", serif;
+  --font-sans: "Inter", sans-serif;
+}
+
+body {
+  background-color: var(--color-dark);
+  color: var(--color-text-main);
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+}
+
+.text-gold-gradient {
+  background: linear-gradient(to right, var(--color-gold-light), var(--color-gold), var(--color-gold-dark));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.glass-panel {
+  background: rgba(10, 10, 10, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(212, 175, 55, 0.1);
+}
+
+/* AI Breathing Glow Effect */
+@keyframes breathing {
+  0%, 100% { box-shadow: 0 0 20px rgba(212, 175, 55, 0.05); }
+  50% { box-shadow: 0 0 50px rgba(212, 175, 55, 0.15); }
+}
+.ai-glow {
+  animation: breathing 4s ease-in-out infinite;
+}

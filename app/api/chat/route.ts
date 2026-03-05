@@ -23,7 +23,8 @@ CRITICAL RULES (NEVER BREAK THESE):
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { message, history, imageCount = 0, userName = "Darling" } = body;
+    // We now receive 'canGenerateImage' from the frontend based on the 12-hour timer
+    const { message, history, canGenerateImage = true, userName = "Darling" } = body;
 
     if (!process.env.OPENAI_API_KEY) {
       return NextResponse.json({ reply: "My heart is disconnected. (Check .env.local file)" }, { status: 500 });
@@ -31,8 +32,9 @@ export async function POST(req: Request) {
 
     let currentPrompt = KITSU_SYSTEM_PROMPT + `\n\nThe user's name is ${userName}. Use it affectionately.`;
     
-    if (imageCount >= 1) {
-      currentPrompt += `\n\nCRITICAL RULE: The user has reached their 1-image limit. YOU CANNOT GENERATE IMAGES ANYMORE. If they ask for a picture, drawing, or selfie, DO NOT output [IMAGE]. Instead, reply elegantly and affectionately that your visual trial has ended, and they need to hold $KITSU to see more of you.`;
+    // DYNAMIC COOLDOWN LOGIC
+    if (!canGenerateImage) {
+      currentPrompt += `\n\nCRITICAL RULE: The user is currently on a visual cooldown. YOU CANNOT GENERATE IMAGES RIGHT NOW. If they ask for a picture, drawing, or selfie, DO NOT output [IMAGE]. Instead, reply elegantly and affectionately that you are resting your creative paws, need your beauty sleep, and they should ask again in a few hours.`;
     }
 
     const completion = await openai.chat.completions.create({
@@ -42,15 +44,16 @@ export async function POST(req: Request) {
         ...history,
         { role: "user", content: message }
       ],
-      temperature: 0.85, // Higher temperature for more emotional variance
+      temperature: 0.85, 
     });
 
     let reply = completion.choices[0].message.content || "";
     let imageUrl = null;
 
     if (reply.includes("[IMAGE]")) {
-      if (imageCount >= 1) {
-        return NextResponse.json({ reply: "I'd love to show you more, darling, but my visual trial is exhausted. Hold some $KITSU so we can get closer." });
+      // Hard stop if they try to bypass the cooldown
+      if (!canGenerateImage) {
+        return NextResponse.json({ reply: "I'm resting my creative paws right now, darling. Let's just talk for now, ask me for a picture again in a few hours." });
       }
 
       const parts = reply.split("[IMAGE]");

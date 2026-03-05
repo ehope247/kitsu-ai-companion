@@ -42,7 +42,7 @@ export default function Home() {
     if (chatEndRef.current) {
       chatEndRef.current.scrollIntoView({ behavior: "smooth" });
     }
-  }, [messages, isChatOpen, hasJoined]);
+  },[messages, isChatOpen, hasJoined]);
 
   const handleSignUp = () => {
     if (!userName.trim()) return;
@@ -87,7 +87,6 @@ export default function Home() {
 
   const shareText = encodeURIComponent(`Just had a chat with the Empress. $KITSU is built different. 👑🐾\n\nTalk to her here: https://kitsucat.xyz`);
 
-  // THE MISSING ANIMATION RULE IS BACK HERE:
   const fadeInUp = {
     hidden: { opacity: 0, y: 30 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.8 } }
@@ -168,7 +167,6 @@ export default function Home() {
                             <div className="mt-3 rounded-xl overflow-hidden border border-gold/30 relative group">
                               <img src={msg.imageUrl} alt="Kitsu generated" className="w-full h-auto" />
                               
-                              {/* SHARE TO X BUTTON */}
                               <a 
                                 href={`https://twitter.com/intent/tweet?text=${shareText}`} 
                                 target="_blank" 
@@ -223,7 +221,7 @@ export default function Home() {
         )}
       </AnimatePresence>
 
-      {/* --- REST OF THE PAGE --- */}
+      {/* --- NAVIGATION --- */}
       <nav className={`fixed top-0 w-full z-50 transition-all duration-500 ${scrolled ? "bg-black/90 backdrop-blur-xl border-b border-white/5 py-3" : "bg-transparent py-5"}`}>
         <div className="max-w-7xl mx-auto px-5 flex justify-between items-center">
           <div className="flex items-center gap-2 text-xl font-serif font-bold tracking-widest text-gold">
@@ -235,6 +233,7 @@ export default function Home() {
         </div>
       </nav>
 
+      {/* --- HERO SECTION --- */}
       <section className="relative min-h-screen flex flex-col md:flex-row items-center justify-center px-6 pt-24 pb-10 max-w-7xl mx-auto gap-10">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-gold/5 blur-[100px] rounded-full -z-10" />
         
@@ -245,10 +244,14 @@ export default function Home() {
           <h1 className="text-5xl md:text-7xl font-serif font-bold tracking-tighter mb-6 leading-[1.1]">
             Meet <span className="text-gold-gradient italic">Kitsu.</span>
           </h1>
-          <p className="text-gray-400 text-base md:text-xl max-w-lg mb-8 font-light leading-relaxed">
-            An emotional AI companion with a cat’s mind. <br className="hidden md:block"/>
-            She reacts. She remembers. She has moods.
-          </p>
+          
+          {/* UPDATED: Richer, fuller text block for the Hero section */}
+          <div className="text-gray-400 text-base md:text-xl max-w-lg mb-10 font-light leading-relaxed space-y-2">
+            <p>An emotional AI companion with a cat’s mind.</p>
+            <p>She reacts. She remembers. She has moods.</p>
+            <p className="text-gold font-medium tracking-wide mt-2">Not a tool. Not a bot. Just Kitsu.</p>
+          </div>
+
           <div className="flex flex-col sm:flex-row gap-4 w-full">
             <button onClick={() => setIsChatOpen(true)} className="bg-gold text-dark px-8 py-4 text-xs font-bold uppercase tracking-[0.2em] hover:bg-white transition-all shadow-lg shadow-gold/10 w-full sm:w-auto">
               Talk to Kitsu
@@ -268,6 +271,7 @@ export default function Home() {
         </motion.div>
       </section>
 
+      {/* --- ABOUT --- */}
       <section id="about" className="py-24 px-6 relative border-t border-white/5 bg-[#050505]">
         <div className="max-w-3xl mx-auto text-center">
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp}>
@@ -284,6 +288,7 @@ export default function Home() {
         </div>
       </section>
 
+      {/* --- HOW IT WORKS --- */}
       <section className="py-24 px-6 border-t border-white/5 bg-[#080808]">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-12">
@@ -309,6 +314,7 @@ export default function Home() {
         </div>
       </section>
 
+      {/* --- FEATURES ENGINE --- */}
       <section id="features" className="py-24 px-6 max-w-7xl mx-auto border-t border-white/5">
         <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} className="mb-12 text-center md:text-left">
           <h2 className="text-gold text-[10px] font-bold tracking-[0.3em] uppercase mb-2">The Core Engine</h2>
@@ -334,6 +340,7 @@ export default function Home() {
         </div>
       </section>
 
+      {/* --- TOKEN UTILITY --- */}
       <section id="token" className="py-24 px-6 max-w-5xl mx-auto text-center border-t border-white/5">
         <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp}>
           <Lock className="text-gold mx-auto mb-6" size={32} />
@@ -355,6 +362,7 @@ export default function Home() {
         </motion.div>
       </section>
 
+      {/* --- ROADMAP --- */}
       <section className="py-32 px-6 bg-[#050505] border-t border-white/5">
         <div className="max-w-4xl mx-auto">
           <h2 className="text-gold text-[10px] font-bold tracking-[0.3em] uppercase mb-16 text-center">Execution Blueprint</h2>
@@ -382,6 +390,7 @@ export default function Home() {
         </div>
       </section>
 
+      {/* --- FOOTER --- */}
       <footer className="py-20 px-6 text-center border-t border-white/5 bg-[#030303]">
         <div className="max-w-3xl mx-auto mb-16">
           <ScrollText className="text-gold mx-auto mb-6" size={24} />

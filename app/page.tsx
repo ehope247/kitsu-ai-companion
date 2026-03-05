@@ -12,7 +12,7 @@ export default function Home() {
   
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [lastImageTime, setLastImageTime] = useState<number>(0); // Tracks the exact time they last generated
+  const[lastImageTime, setLastImageTime] = useState<number>(0);
   const [messages, setMessages] = useState<{role: string, content: string, imageUrl?: string}[]>([]);
   
   const chatEndRef = useRef<HTMLDivElement>(null);
@@ -59,7 +59,6 @@ export default function Home() {
     setMessages(prev =>[...prev, { role: "user", content: userMsg }]);
     setIsLoading(true);
 
-    // Calculate if they are allowed to generate an image based on the 12-hour cooldown
     const canGenerateImage = (Date.now() - lastImageTime) > COOLDOWN_MS;
 
     try {
@@ -74,7 +73,6 @@ export default function Home() {
       const data = await res.json();
       setMessages(prev =>[...prev, { role: "kitsu", content: data.reply, imageUrl: data.imageUrl }]);
 
-      // If she successfully generated an image, restart the 12-hour timer!
       if (data.imageUrl) {
         const now = Date.now();
         setLastImageTime(now);
@@ -88,6 +86,12 @@ export default function Home() {
   };
 
   const shareText = encodeURIComponent(`Just had a chat with the Empress. $KITSU is built different. 👑🐾\n\nTalk to her here: https://kitsucat.xyz`);
+
+  // THE MISSING ANIMATION RULE IS BACK HERE:
+  const fadeInUp = {
+    hidden: { opacity: 0, y: 30 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.8 } }
+  };
 
   return (
     <main className="min-h-screen font-sans selection:bg-gold selection:text-dark relative bg-[#030303] text-[#EAEAEA]">
@@ -219,7 +223,7 @@ export default function Home() {
         )}
       </AnimatePresence>
 
-      {/* --- REST OF THE PAGE REMAINS THE SAME --- */}
+      {/* --- REST OF THE PAGE --- */}
       <nav className={`fixed top-0 w-full z-50 transition-all duration-500 ${scrolled ? "bg-black/90 backdrop-blur-xl border-b border-white/5 py-3" : "bg-transparent py-5"}`}>
         <div className="max-w-7xl mx-auto px-5 flex justify-between items-center">
           <div className="flex items-center gap-2 text-xl font-serif font-bold tracking-widest text-gold">
@@ -234,7 +238,7 @@ export default function Home() {
       <section className="relative min-h-screen flex flex-col md:flex-row items-center justify-center px-6 pt-24 pb-10 max-w-7xl mx-auto gap-10">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-gold/5 blur-[100px] rounded-full -z-10" />
         
-        <motion.div initial="hidden" animate="visible" variants={{hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0, transition: { duration: 0.8 } }}} className="flex-1 text-left z-10 w-full">
+        <motion.div initial="hidden" animate="visible" variants={fadeInUp} className="flex-1 text-left z-10 w-full">
           <div className="mb-6 px-4 py-1.5 border border-gold/20 rounded-full inline-block text-[9px] font-bold tracking-[0.3em] uppercase text-gold">
             System Online
           </div>
